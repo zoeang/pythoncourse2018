@@ -8,9 +8,10 @@ def binarify(num):
     while num>0:
         digits.append(num%2)
         num=num/2
-    print ''.join([str(i) for i in digits[::-1]])
+    print ''.join([str(i) for i in digits[::-1]]) #can remove the brackets and this will still be a list
 
 """convert positive integer to a string in any base"""
+#need a method/ error warning for bases: negative, 10, and 1
 def int_to_base(num, base):
     digits=[]
     while num>0:
