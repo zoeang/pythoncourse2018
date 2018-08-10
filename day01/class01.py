@@ -14,6 +14,7 @@ name = "erin"
 age = "25"
 intro = "Hi, I'm " + name + ", I'm " + age
 
+
 ## call characters w/in string
 print name[0]
 print name[1]
