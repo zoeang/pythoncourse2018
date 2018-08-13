@@ -11,7 +11,7 @@ import string
 
 ## make all characters capitalized
 def shout(txt):
-	print txt.upper()
+	return txt.upper()
 
 
 ## reverse all characters in string
