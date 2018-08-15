@@ -26,10 +26,12 @@ while petitions_on_page:
 		#petitions_on_page=False
 		#return page
 	page+=1 #add 1 to iterator if there was not a break
-
-address='https://petitions.whitehouse.gov/?page='+str(page-1) #get address from " next to last page," which is the last page with petitions
-web_page = urllib2.urlopen(address)
-soup = BeautifulSoup(web_page.read()) #
+list_of_soups=[]
+for i in range(0, page):
+	address='https://petitions.whitehouse.gov/?page='+str(i) #get address from " next to last page," which is the last page with petitions
+	web_page = urllib2.urlopen(address)
+	soup = BeautifulSoup(web_page.read()) #
+	list_of_soups.append(soup)
 #-----------------------------------------------------------------------
 
 with open('Ang_HW2.csv', 'wb') as f:
@@ -38,26 +40,38 @@ with open('Ang_HW2.csv', 'wb') as f:
 	#-------------------------------------------------------------------------
 	w = csv.DictWriter(f, fieldnames = ("title", "publishdate", "issues", "signatures"))
 	w.writeheader()
-	petitions={}#create an empty dictionary
- 	
-
+	petitions={} #create an empty dictionary
 	#-------------------------------------------------------------------------
-	# Get titles from https://petitions.whitehouse.gov/petitions
+	# Get webpage for each petition
+	#-------------------------------------------------------------------------
+	all_petitions=[] #list of all url extensions
+	for soup in list_of_soups: #each element in list_of_soups is a webpage; there are 4 elements
+		list_of_h3=soup.find_all('h3')
+		for i in list_of_h3:
+			try:
+				all_petitions.append(i.a.attrs["href"].encode('utf-8'))
+			except:
+				pass
+	 	
+	#-------------------------------------------------------------------------
+	# Titles
 	#-------------------------------------------------------------------------
 	#<a href="/petition/do-not-repeal-net-neutrality">Do Not Repeal Net Neutrality</a>
 	pet_soup.find_all('a').attrs['href']
 
 	#-------------------------------------------------------------------------
-	#get Issues from https://petitions.whitehouse.gov/petitions
+	# Issues
 	#-------------------------------------------------------------------------
 	#<span class="signatures-number">275,457</span>
+	
+
+	#-------------------------------------------------------------------------
+	# Signatures
+	#-------------------------------------------------------------------------
 	
 	petitions['signatures']=[i.get_text().encode('utf-8') for i in pet_soup.find_all('span', {'class':"signatures-number"})]
 	###remove comma and covert to integer
 
-	#-------------------------------------------------------------------------
-	#get number of signatures from https://petitions.whitehouse.gov/petitions
-	#-------------------------------------------------------------------------
 	#<div class="signatures-text-container"><span class="signatures-number">275,457</span>
 	<span class="signatures-text">signed</span>
 	</div>
