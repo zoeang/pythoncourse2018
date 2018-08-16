@@ -73,8 +73,8 @@ with open('Ang_HW2.csv', 'wb') as f:
 		#-------------------------------------------------------------------------
 		# Issues
 		#-------------------------------------------------------------------------
-		#petitions['issues']=page_soup.find_all('div', {'class': 'field-item even'}).h6
-
+		issues=page_soup.find('div', {'class': 'field field-name-field-petition-issues field-type-taxonomy-term-reference field-label-hidden tags'}).find_all('h6')
+		petitions['issues']=[i.get_text().encode('utf-8') for i in issues] #why won't this work like line 68? mult elements?
 		#-------------------------------------------------------------------------
 		# Signatures
 		#-------------------------------------------------------------------------
