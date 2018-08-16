@@ -8,6 +8,7 @@
 # 	Number of signatures
 from bs4 import BeautifulSoup
 import urllib2 
+import csv
 #-------------------------------------------------------------------------
 # Get soup for all webpages
 # Write while loop to get the soup for the page with all of the petitions.
@@ -49,37 +50,37 @@ with open('Ang_HW2.csv', 'wb') as f:
 		list_of_h3=soup.find_all('h3')
 		for i in list_of_h3:
 			try:
-				all_petitions.append(i.a.attrs["href"].encode('utf-8'))
+				all_petitions.append('https://petitions.whitehouse.gov'+i.a.attrs["href"].encode('utf-8'))
 			except:
 				pass
-	 	
 	#-------------------------------------------------------------------------
-	# Titles
-	#-------------------------------------------------------------------------
-	#<a href="/petition/do-not-repeal-net-neutrality">Do Not Repeal Net Neutrality</a>
-	pet_soup.find_all('a').attrs['href']
+	# Fill in data
+	#-------------------------------------------------------------------------	
+	for i in all_petitions:
+		#make soup for each webpage
+		web_page = urllib2.urlopen(i)
+		page_soup = BeautifulSoup(web_page.read())
+		#-------------------------------------------------------------------------
+		# Titles
+		#-------------------------------------------------------------------------
+		#<a href="/petition/do-not-repeal-net-neutrality">Do Not Repeal Net Neutrality</a>
+		title=page_soup.find('h1', {'class': 'title'})
+		petitions['title']=title.get_text().encode('utf-8')
+		#-------------------------------------------------------------------------
+		# Publish Date
+		#-------------------------------------------------------------------------
+		petitions['publishdate']=str(page_soup.find('h4', {'class': 'petition-attribution'})).split(' on ')[1][:-5]
+		#-------------------------------------------------------------------------
+		# Issues
+		#-------------------------------------------------------------------------
+		#petitions['issues']=page_soup.find_all('div', {'class': 'field-item even'}).h6
 
-	#-------------------------------------------------------------------------
-	# Issues
-	#-------------------------------------------------------------------------
-	#<span class="signatures-number">275,457</span>
-	
+		#-------------------------------------------------------------------------
+		# Signatures
+		#-------------------------------------------------------------------------
+		petitions['signatures']=page_soup.find('span', {'class':"signatures-number"}).get_text()
+		#-------------------------------------------------------------------------
+		# Write Observation to row of csv
+		#-------------------------------------------------------------------------
+		w.writerow(petitions)
 
-	#-------------------------------------------------------------------------
-	# Signatures
-	#-------------------------------------------------------------------------
-	
-	petitions['signatures']=[i.get_text().encode('utf-8') for i in pet_soup.find_all('span', {'class':"signatures-number"})]
-	###remove comma and covert to integer
-
-	#<div class="signatures-text-container"><span class="signatures-number">275,457</span>
-	<span class="signatures-text">signed</span>
-	</div>
-	#get publish date from individual petition pages
-
-
-
-#-------------------------------------------------------------------------
-#write csv
-#-------------------------------------------------------------------------
-import csv
