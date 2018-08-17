@@ -1,7 +1,7 @@
 # HOMEWORK
 # Go to https://petitions.whitehouse.gov/petitions
 # Go to the petition page for each of the petitions.
-# Create a .csv le with the following information for each petition:
+# Create a .csv file with the following information for each petition:
 # 	Title
 # 	Published date
 # 	Issues
