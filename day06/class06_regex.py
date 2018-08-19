@@ -18,7 +18,7 @@ print text[1]
 print text[2]
 
 ## Join into one string
-## What could we have done at the outset instead?
+## What could we have done at the outset instead? line 11 f.read()
 alltext = ''.join(text)
 
 
@@ -45,14 +45,14 @@ re.findall(r"\d", alltext) ##\d digits
 re.findall(r"\D", alltext) ##\d non-digits
 re.findall(r"[a]", alltext) ## any chars in []
 re.findall(r"[a-d]", alltext) ## any chars in []
+re.findall(r"[a-zA-Z]", alltext) ## any chars in [] #all letters upper and lower
 re.findall(r"[^a-d]", alltext) ## ^ except
-re.findall(r"\w", alltext) ## \w alphanumeric
+re.findall(r"\w", alltext) ## \w alphanumeric [a-zA-Z0-9]
 re.findall(r"\W", alltext) ## \W non-alphanumeric
 re.findall(r"\s", alltext) ## \s whitespace
 re.findall(r"\S", alltext) ## \S non-whitespace
 re.findall(r".", alltext) ## . any char
 re.findall(r"\.", alltext) ## \ is escape
-
 
 ## Now, how much of these things?
 
@@ -72,7 +72,7 @@ re.findall(r"(Yes) we can", alltext)
 
 ## Exercise: How would we grab 9/11 as it appears in text?
 
-
+re.findall(r'\d+\/\d+', alltext)
 
 ## Explain what's happening:
 
@@ -113,6 +113,9 @@ for line in text:
   if keyword.search(line):
     print line 
 
+for i,line in enumerate(text): #prints indx of the list (like the line)
+  if keyword.search(line):
+    print line 
 
 pattern = re.compile(r'\d') #Create a regex object
 
@@ -127,7 +130,7 @@ mline = 'bin\nban\ncan'
 
 ## ^ is start of the string
 ## looking for b
-pattern = re.compile(r'^b\w*')
+pattern = re.compile(r'^b\w*') #^ not in [] menas beginning of string 
 pattern.findall(mline)
 
 pattern = re.compile(r'^b\w*', re.MULTILINE)
@@ -142,7 +145,7 @@ re.findall(r'^b\w*', alltext)
 ## Exercise
 ## Check if a line ends in a period
 ## How is this working?
-re.findall(r'^.*\.$', alltext, re.MULTILINE)
+re.findall(r'^.*\.$', alltext, re.MULTILINE) #$ means end of string 
 
 
 
@@ -159,7 +162,7 @@ tsearch.group(2) #the second group
 
 ## Similar to using () alone, but the text
 ## matched by the group is then accessible
-pattern = re.compile(r'(?P<number>\d*)\s(?P<name>\w*)')
+pattern = re.compile(r'(?P<number>\d*)\s(?P<name>\w*)') # ?P means make a dictionary where the save element is called whatever is in <>
 tsearch = pattern.search(t)
 tsearch.groups()
 tsearch.groupdict()
