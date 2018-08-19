@@ -5,7 +5,6 @@ meetup = imp.load_source('labexercises', 'meetupkeys.py')
 api = meetup.client
 
 #1. Pick a search criteria for groups. 
-### I will search by country (Russia RU)
 
 tacos=api.GetFindGroups({"zip" :'78701','text': "tacos", 'members': "6"}) #zipcode for the capitol in Austin
 #11 groups in zipcode 78701 related to tacos
@@ -24,20 +23,30 @@ most_members=max([i.members for i in tacos]) #find the max number of members
 taco_members=api.GetMembers({'group_urlname':'Trailer-Friends'})
 #member objects
 ppl=taco_members.__dict__['results']
-ppl_ids=[i['id'] for i in ppl]
+ppl_ids=[i['id'] for i in ppl] 
 number_of_groups=[]
-for i in ppl_ids:
-	#groups_of_members.append(api.GetGroups({'member_id':i}))
-	number_of_groups.append(api.GetGroups({'member_id':i['id']}).meta['total_count'])
 import time
+#write a while loop that creates a list of tuples where the first item
+# is the member id and the second is the number of groups the member is in 
 number_of_groups=[]
 timebreak=True
 while timebreak:
 	for i in ppl_ids:
 		try:
-			number_of_groups.append(api.GetGroups({'member_id':str(i)}).meta['total_count'] )
+			number_of_groups.append((i,api.GetGroups({'member_id':str(i)}).meta['total_count'] ))
 			timebreak=False
 		except: 
 			time.sleep(8)
 			continue
 		if len(number_of_groups)==200: break
+
+#find the max number of groups: search index 1 of tuples
+from operator import itemgetter
+max(number_of_groups,key=itemgetter(1))
+
+#member id 200756197 is in 232 groups
+
+
+#i'm stuck............
+
+#3. Of the active members, which group is the most popular?
