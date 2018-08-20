@@ -1,12 +1,14 @@
 
 import imp
+import os
+
 
 meetup = imp.load_source('labexercises', 'meetupkeys.py')
 api = meetup.client
 
 #1. Pick a search criteria for groups. 
 
-tacos=api.GetFindGroups({"zip" :'78701','text': "tacos", 'members': "6"}) #zipcode for the capitol in Austin
+tacos=api.GetFindGroups({"zip" :'78701','text': "tacos"}) #zipcode for the capitol in Austin
 #11 groups in zipcode 78701 related to tacos
 
 #Find the group with the most members: there is an argument 'members' for .GetFindGroups, but I don't know how it works; it doesn't order the list of MeetUp objects like it should 
@@ -14,12 +16,12 @@ tacos=api.GetFindGroups({"zip" :'78701','text': "tacos", 'members': "6"}) #zipco
 # There are few groups in my search, but were there many groups, I believe this would work
 most_members=max([i.members for i in tacos]) #find the max number of members
 [i for i,j in enumerate(num_of_members) if j==most_members]
- #get the index of the group with the most members
- tacos[9].urlname 
+#get the index of the group with the most members
+tacos[9].urlname 
 
- #Trailer-Friends has 6986 members.
+#Trailer-Friends has 6986 members.
 
- #2. Which member is the most active?
+#2. Which member is the most active?
 taco_members=api.GetMembers({'group_urlname':'Trailer-Friends'})
 #member objects
 ppl=taco_members.__dict__['results']
@@ -47,6 +49,11 @@ max(number_of_groups,key=itemgetter(1))
 #member id 200756197 is in 232 groups
 
 
-#i'm stuck............
-
 #3. Of the active members, which group is the most popular?
+guy.results
+mem_in_groups=[]
+for i in guy.results:
+	mem_in_groups.append((i['name'],i['members'] ))
+max(mem_in_groups,key=itemgetter(1))
+
+#The group with the most number of members that Taco Guy is in is NY Tech Meetup with 59637 members
