@@ -70,4 +70,31 @@ def dat(lis):
 		bub.append(timealg(bubble,lis))
 		merge_alg.append(timealg(merge_sort, lis))
 		lis.append(int(uniform(1,100)))
-	return [bub, merge_alg]
+	return bub, merge_alg
+bubdat, mergedat=dat(lis)
+# Plotting=====================================================================
+import matplotlib.pyplot as plt
+import numpy
+
+bubdatpairs=zip(*bubdat)
+scaledbubdat=[i*1000 for i in bubdatpairs[1][0:20]]
+mergedatpairs=zip(*mergedat)
+scaledmergedat= [i*1000 for i in mergedatpairs[1][0:20]]
+plt.subplots_adjust(left = .13, right = .95, top = .9, bottom = .3)
+plt.plot(bubdatpairs[0][0:20], scaledbubdat, linestyle='dashed', label='Bubble')
+plt.plot(mergedatpairs[0][0:20], scaledmergedat, label='Merge')
+
+plt.legend(loc = "upper left", prop = {"size":10})
+plt.ylabel("Time in Thousands of Seconds")
+plt.xlabel("Length of List to be Sorted")
+plt.title("Computation Time for Bubble and Merge Sorting Algorithms")
+txt = """
+The plot dsplays the time required for each algorithm to sort a list of the 
+length indicated on the x-axis. The most simple complexity for the bubble algorithm
+is O(n), or linear, and the most complex, O(n^2), or squared. The merge algorithm
+will always be of complexity O(n log n).
+"""
+plt.figtext(.05, 0, txt, fontsize = 10, ha = "left")
+import os
+os.chdir('C:\\Users\\zoeja\\Dropbox\\Python\\pythoncourse2018\\homeworks\\hw4')
+plt.savefig('Ang_plot.pdf')
