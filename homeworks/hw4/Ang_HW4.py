@@ -14,7 +14,7 @@ def bubble(n): # n is a list
 	return n
 
 # Algorithm 2: Merge sorting ; best and worst case O(n log n) ---------------------------------
-# Need help debugging: dropping first element of arugment list
+
 #====================================================================
 def merge(left, right):
 	output=[]
@@ -49,6 +49,39 @@ def merge_sort(l):
 	rightlist=merge_sort(right)
 	#print str(rightlist) + '\t right'
 	return merge(leftlist, rightlist)
+	
+# Quick sort: best case is O(n log n), worst case is O(n^2)===============================================
+#code taken from http://interactivepython.org/runestone/static/pythonds/SortSearch/TheQuickSort.html
+def quickSort(alist):
+   quickSortHelper(alist,0,len(alist)-1)
+
+def quickSortHelper(alist,first,last):
+   if first<last:
+       splitpoint = partition(alist,first,last)
+       quickSortHelper(alist,first,splitpoint-1)
+       quickSortHelper(alist,splitpoint+1,last)
+
+def partition(alist,first,last):
+   pivotvalue = alist[first]
+   leftmark = first+1
+   rightmark = last
+   done = False
+   while not done:
+       while leftmark <= rightmark and alist[leftmark] <= pivotvalue:
+           leftmark = leftmark + 1
+       while alist[rightmark] >= pivotvalue and rightmark >= leftmark:
+           rightmark = rightmark -1
+       if rightmark < leftmark:
+           done = True
+       else:
+           temp = alist[leftmark]
+           alist[leftmark] = alist[rightmark]
+           alist[rightmark] = temp
+   temp = alist[first]
+   alist[first] = alist[rightmark]
+   alist[rightmark] = temp
+   return rightmark
+
 # Funtion to time algorithms---------------------------------------------
 
 # Returns tuple of time and length of arg and time (tuple will be (x,y) point for ploting)
@@ -66,9 +99,11 @@ lis=[1]
 def dat(lis):
 	bub=[]
 	merge_alg=[]
+	#quick=[]
 	while len(lis)<100:
 		bub.append(timealg(bubble,lis))
 		merge_alg.append(timealg(merge_sort, lis))
+		#quick.append(timealg(quicksort, lis))
 		lis.append(int(uniform(1,100)))
 	return bub, merge_alg
 bubdat, mergedat=dat(lis)
@@ -98,3 +133,6 @@ plt.figtext(.05, 0, txt, fontsize = 10, ha = "left")
 import os
 os.chdir('C:\\Users\\zoeja\\Dropbox\\Python\\pythoncourse2018\\homeworks\\hw4')
 plt.savefig('Ang_plot.pdf')
+
+
+
